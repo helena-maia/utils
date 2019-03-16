@@ -9,7 +9,7 @@
         source <name>/bin/activate
 
 - Using the virtualenv (activated)
-    1. Copy src directory
+    1. [Copy src directory]
         cp <path_to_src>/src <path_to_virtualenv>/<name>
     2. Install requirements
         pip install -r requirements.txt
