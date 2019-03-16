@@ -1,2 +1,5 @@
-ffmpeg-python==0.1.17
+#python 3.5.2
+
 youtube-dl==2019.3.9
+moviepy==1.0.0 --trusted-host=pypi.python.org import
+opencv-python==4.0.0.21
