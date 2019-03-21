@@ -29,8 +29,12 @@ for d in os.listdir(args.rgb_of_dir):
             flow_x_path = os.path.join(path_orig, of_fmt%('x',i+1))
             flow_y_path = os.path.join(path_orig, of_fmt%('y',i+1))
 
-            flow_x = cv2.imread(flow_x_path,0)
-            flow_y = cv2.imread(flow_y_path,0)
+            flow_x = cv2.imread(flow_x_path,0).astype(float)
+            flow_y = cv2.imread(flow_y_path,0).astype(float)
+
+            black_x = float(flow_x[flow_x==0].size)/flow_x.size
+            black_y = float(flow_y[flow_y==0].size)/flow_y.size
+            if(black_x > 0.3 or black_y > 0.3): print("Black > 0.3")
 
             diff = flow_x - flow_y
             diff_sum+=diff.sum()
@@ -41,10 +45,4 @@ for d in os.listdir(args.rgb_of_dir):
         if(diff_sum >= 0): class_mov[class_ind][0]+=1
         else: class_mov[class_ind][1]+=1
 
-direction = []
-
-for name,mov in zip(class_list,class_mov):
-    if (mov[0] > mov[1]): direction.append(name+",1")
-    else: direction.append(name+",2")
-
-np.savetxt(args.direction_path,direction,fmt="%s")
+np.save(args.direction_path, class_mov)
