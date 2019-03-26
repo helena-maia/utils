@@ -18,7 +18,7 @@ class Download():
     # ext: 	video extension
     def __init__(self, out_tmpl, tmp_dir, ext = ".mp4"):
         self.ext=ext
-        self.out_tmpl=out_tmpl+ext
+        self.out_tmpl=out_tmpl
         self.tmp=tmp_dir
        
         ydl_opts = {
@@ -36,10 +36,15 @@ class Download():
         ret = 1
         try: 
             self.ydl.download([url])
-            ffmpeg_extract_subclip(os.path.join(self.tmp,yt_id+self.ext), start_time, end_time, targetname=self.out_tmpl%out_tmpl_data)
-            if(not os.path.isfile(self.out_tmpl%out_tmpl_data)): 
-                print ("FFMPEG error")
-                ret = 0
+            ffmpeg_extract_subclip(os.path.join(self.tmp,yt_id+self.ext), start_time, end_time, targetname=self.out_tmpl%out_tmpl_data+self.ext)
+        except OSError:
+            try:
+                ffmpeg_extract_subclip(os.path.join(self.tmp,yt_id+self.ext), start_time, end_time, targetname=self.out_tmpl%out_tmpl_data+".webm")
+            except Exception as ex:
+                template = "2:An exception of type {0} occurred. Arguments:\n{1!r}"
+                message = template.format(type(ex).__name__, ex.args)
+                print (message)
+                ret = 0 #failure
         except Exception as ex:
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
