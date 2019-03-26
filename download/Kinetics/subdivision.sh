@@ -1,8 +1,4 @@
-for i in {1..9}; do
-    cat kinetics_train.csv | head -n 1 > train0$i.txt
-done
-
-for i in {10..40}; do
+for i in {01..40}; do
     cat kinetics_train.csv | head -n 1 > train$i.txt
 done
 
