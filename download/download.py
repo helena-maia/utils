@@ -11,18 +11,19 @@ from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 import numpy as np
 import argparse
 import os
+import glob
 
 class Download():
     # out_tmpl:	output format with subclip path, without extension ex: "dir/%s"
     # tmp_dir: 	directory to temporarily save full videos
     # ext: 	video extension
-    def __init__(self, out_tmpl, tmp_dir, ext = ".mp4"):
-        self.ext=ext
+    def __init__(self, out_tmpl, tmp_dir):
         self.out_tmpl=out_tmpl
         self.tmp=tmp_dir
+        self.conv_cmd = "ffmpeg -y -i '%s' -strict experimental -c:a aac '%s'"
        
         ydl_opts = {
-            "outtmpl": os.path.join(self.tmp,"%(id)s"+ext), #<tmp_dir>/yt_id.<ext>
+            "outtmpl": os.path.join(self.tmp,"%(id)s"), #<tmp_dir>/yt_id, ydl automatically adds the extension
             "quiet": False,
             "no_warnings": True,
         }
@@ -35,19 +36,27 @@ class Download():
         url = 'https://www.youtube.com/watch?v='+yt_id
         ret = 1
         try: 
-            self.ydl.download([url])
-            ffmpeg_extract_subclip(os.path.join(self.tmp,yt_id+self.ext), start_time, end_time, targetname=self.out_tmpl%out_tmpl_data+self.ext)
-        except OSError:
-            try:
-                ffmpeg_extract_subclip(os.path.join(self.tmp,yt_id+self.ext), start_time, end_time, targetname=self.out_tmpl%out_tmpl_data+".webm")
-            except Exception as ex:
-                template = "2:An exception of type {0} occurred. Arguments:\n{1!r}"
-                message = template.format(type(ex).__name__, ex.args)
-                print (message)
-                ret = 0 #failure
+            self.ydl.download([url]) #download
+
+            occur = glob.glob(os.path.join(self.tmp, yt_id)+"*") #check video occurences in tmp
+            if (len(occur) != 1): raise Exception('None or multiple video occurrences: %d'%(len(occur))) 
+
+            occur = occur[0]
+            ext = "."+occur.split(".")[-1]   
+            ffmpeg_extract_subclip(occur, start_time, end_time, targetname=self.out_tmpl%out_tmpl_data+ext) #extract subclip
+
+            #subclip conversion to mp4
+            if (ext == ".webm" or ext == ".mkv"):
+                path_src = self.out_tmpl%out_tmpl_data+ext
+                path_dest = self.out_tmpl%out_tmpl_data+".mp4"
+                os.system(self.conv_cmd%(path_src, path_dest))
+                os.remove(path_src)
+
+            os.remove(occur) #remove video from tmp
+
         except Exception as ex:
-            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-            message = template.format(type(ex).__name__, ex.args)
+            template = "Item: ({},{},{},{}). An exception of type {} occurred. Arguments:\n{!r}"
+            message = template.format(yt_id, str(start_time), str(end_time), self.out_tmpl%out_tmpl_data, type(ex).__name__, ex.args)
             print (message)
             ret = 0 #failure
 
