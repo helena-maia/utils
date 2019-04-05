@@ -84,13 +84,14 @@ if __name__ == "__main__":
     out_fmt = os.path.join(args.video_dir,"%s_%s_%s_%04d") #(train_or_test, class, youtube_id, start_time)
     d = Download(out_fmt, args.tmp_dir)
 
-    yt_list = np.loadtxt(args.yt_id_list, delimiter=',',dtype='S100')[1:] #ignore header
+    yt_list = np.loadtxt(args.yt_id_list, delimiter=',',dtype='U100')[1:] #ignore header
     total = yt_list.shape[0]
 
     for ind,v in zip(range(1,total+1),yt_list):
         print ("%d of %d"%(ind, total))
         label, yt_id, start_time, end_time, split = v
-        ret = d.download(yt_id, int(start_time), int(end_time), (split,label.replace(" ","-"),yt_id, start_time))
+        label = label.replace(" ","-")
+        ret = d.download(yt_id, int(start_time), int(end_time), (split,label,yt_id, int(start_time)))
 
         
 
