@@ -14,14 +14,24 @@ def getArgs():
 if __name__ == "__main__":
     args = getArgs()
 
-    yt_list = np.loadtxt(args.yt_id_list, delimiter=',',dtype=str)[1:] #ignore header
+    yt_list = np.loadtxt(args.yt_id_list, delimiter=',',dtype='U100')[1:] #ignore header
     
-    in_fmt = os.path.join(args.video_dir,"%s_%s_%s.mp4") #(train_or_test, class, youtube_id)
+    in_fmt = os.path.join(args.video_dir,"%s_%s_%s_%04d.mp4") #(train_or_test, class, youtube_id, start_time)
     missing = []
 
-    for v in yt_list:
-        label, yt_id, split = v[[0,1,-1]]
-        if not os.path.isfile(in_fmt%(split, label, yt_id)): 
+    for i,v in enumerate(yt_list):
+        print ("%d of %d"%(i,len(yt_list)))
+        label, yt_id, split, start_time = v[0], v[1], v[-1], int(v[2])
+
+        label = label.replace(" ","-")
+
+        if(not label in in_fmt%(split, label, yt_id, start_time)):
+           print (label, in_fmt%(split, label, yt_id, start_time))
+           a = input()
+
+        if not os.path.isfile(in_fmt%(split, label, yt_id, start_time)): 
+            print (in_fmt%(split, label, yt_id, start_time))
+            print (v)
             missing.append(v)
 
     np.savetxt(args.missing_list, missing, fmt="%s", delimiter=",")
