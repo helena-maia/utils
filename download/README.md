@@ -23,7 +23,13 @@ python remove_empty.py <video_dir>
 
 python remove_empty.py videos/
 
-3) List missing files
+3) Remove videos that can't be opened
+
+python pool_check.py <video_dir> --num_worker <n> --ext <ext>
+
+python pool_check.py videos/ --num_worker 4 --ext mp4
+
+4) List missing files
 
 python missing_download.py <yt_id_list> <video_dir> <missing_list>
 
