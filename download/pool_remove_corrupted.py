@@ -20,7 +20,7 @@ def run_open(x):
 
 
 def getArgs():
-    parser = argparse.ArgumentParser(description='Compute visual rhythm (mean).')
+    parser = argparse.ArgumentParser(description='Remove videos that cannot be opened.')
     parser.add_argument("video_dir", action='store', type=str, help="directory that contains the subclips")
     parser.add_argument('--num_worker', type=int, default=8, help='')
     parser.add_argument('--ext', type=str, default='avi', choices=['avi','mp4'], help='video file extensions')
