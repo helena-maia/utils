@@ -13,9 +13,17 @@ missing_download: list missing files
 Exec:
 1) Download videos
 
-python download.py <yt_id_list> <video_dir> <tmp_dir>
+python download_dl.py <yt_id_list> <video_dir> <tmp_dir>
 
-python download.py kinetics_train.csv videos/ tmp/
+python download_dl.py kinetics_train.csv videos/ tmp/
+
+or
+
+python download_pytube.py <yt_id_list> <video_dir>
+
+python download_pytube.py kinetics_train.csv videos/
+
+
 
 2) Remove empty files
 
