@@ -2,3 +2,4 @@
 
 youtube-dl==2019.3.9
 moviepy==1.0.0 --trusted-host=pypi.python.org import
+pytube==9.4.0
