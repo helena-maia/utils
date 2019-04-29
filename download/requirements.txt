@@ -1,5 +1,6 @@
 #python 3.5.2
 
-youtube-dl==2019.3.9
-moviepy --trusted-host=pypi.python.org import
+opencv-python==4.0.0.21
+moviepy==1.0.0 --trusted-host=pypi.python.org import
+youtube-dl
 pytube
