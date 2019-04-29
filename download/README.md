@@ -43,7 +43,7 @@ python missing_download.py <yt_id_list> <video_dir> <missing_list>
 
 python missing_download.py kinetics_train.csv videos/ videos/missing.txt
 
-Note: Use the latest moviepy to avoid regex errors. 
+Note: Use the latest youtube-dl/pytube to avoid regex errors. 
 
 
 
