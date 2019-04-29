@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 
 def getArgs():
-    parser = argparse.ArgumentParser(description='Download dataset.')
+    parser = argparse.ArgumentParser(description='Check missing files.')
     parser.add_argument("yt_id_list", action='store', type=str, help="path to the list of youtube ids")
     parser.add_argument("video_dir", action='store', type=str, help="directory with the subclips")
     parser.add_argument("missing_list", action='store', type=str, help="path to the output")
