@@ -11,6 +11,11 @@ import argparse
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/drive']
+mimetype_dict = {
+                "txt": "text/plain",
+                "json": "application/json",
+                "tar": "application/x-tar"
+                }
 
 def init(credentials_path):
     """Shows basic usage of the Drive v3 API.
@@ -56,14 +61,19 @@ def createFolder(folder_name, parent_id):
 
 def upload_file(file_path, parent_id, mimetype):
     file_name = os.path.basename(file_path)
-    file_metadata = {'name': file_name, 
-                     'parents':[parent_id]}
-    media = MediaFileUpload(file_path, mimetype=mimetype)
-    file = service.files().create(body=file_metadata,
-                                    media_body=media,
-                                    fields='id').execute()
+    ext = file_name.split(".")[-1].lower()
+    mimetype = mimetype_dict.get(ext, None)
 
-    return file.get('id')
+    if mimetype:
+        file_metadata = {'name': file_name, 
+                         'parents':[parent_id]}
+        media = MediaFileUpload(file_path, mimetype=mimetype)
+        file = service.files().create(body=file_metadata,
+                                        media_body=media,
+                                        fields='id').execute()
+
+        return file.get('id')
+    return None
 
 def sweep(root, parent_id):
     content_list = glob.glob(os.path.join(root,"*"))
