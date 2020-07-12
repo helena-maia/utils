@@ -14,7 +14,9 @@ SCOPES = ['https://www.googleapis.com/auth/drive']
 mimetype_dict = {
                 "txt": "text/plain",
                 "json": "application/json",
-                "tar": "application/x-tar"
+                "tar": "application/x-tar",
+                "jpg": "image/jpeg",
+                "png": "image/png"
                 }
 
 def init(credentials_path):
