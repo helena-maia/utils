@@ -15,6 +15,7 @@ mimetype_dict = {
                 "txt": "text/plain",
                 "json": "application/json",
                 "tar": "application/x-tar",
+                "npy": "application/npy",
                 "jpg": "image/jpeg",
                 "png": "image/png"
                 }
