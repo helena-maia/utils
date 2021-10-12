@@ -1,6 +1,6 @@
 #python 3.5.2
 
-opencv-python==4.0.0.21
+opencv-python==4.2.0.32
 moviepy==1.0.0 --trusted-host=pypi.python.org import
 youtube-dl
 pytube
